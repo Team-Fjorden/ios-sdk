@@ -14,7 +14,7 @@
 
 The central class of everything you need is the `GripManager`. You can access it using `GripManager.default`. You have to call `configure()` before anything else can be accessed. The grip manager comes with different operations modes: The default one uses the system's bluetooth stack. Therefore it will only work on a physical device, bluetooth on the iOS simulator acts differently. You can also run in `simulated` mode, to simulate any kind of situation to test your integration. Under the hood is completely mocks `CoreBluetooth` and doesn't touch the hardware at all. This is the default when running the SDK on the simulator.
 
-To use the normal mode, simply call `configure()`, otherwise pass the desired opration mode `GripManager.default.configure(with: .simulated)`.
+To use the normal mode, simply call `configure()`, otherwise pass the desired operation mode `GripManager.default.configure(with: .simulated)`.
 
 The Fjorden SDK offers two API versions:
 
@@ -43,7 +43,7 @@ Call `start()` on `GripManager` as soon as your app launches. By design, this me
 
 #### Forget a configured grip
 
-In order to fully forget a paired grip, you have to call `GripManager.default.disconnectAndForgotBondedGrip()`. Afterwards, you **have** to direct users to Setinngs.app -> Bluetooth -> Fjorden Grip, let them tap the blue `i` button, and select “Forget this device”. Sadly, there is no programmatic way to achieve this.
+In order to fully forget a paired grip, you have to call `GripManager.default.disconnectAndForgotBondedGrip()`. Afterwards, you **have** to direct users to Settings.app -> Bluetooth -> Fjorden Grip, let them tap the blue `i` button, and select “Forget this device”. Sadly, there is no programmatic way to achieve this.
 
 ## State
 
