@@ -12,20 +12,17 @@
 
 ## Quick Start
 
-The central class of everything you need is the `GripManager`. You can access it using `GripManager.default`. You have to call `configure()` before anything else can be accessed. The grip manager comes with different operations modes: The default one uses the system's bluetooth stack. Therefore it will only work on a physical device, bluetooth on the iOS simulator acts differently. You can also run in `simulated` mode, to simulate any kind of situation to test your integration. Under the hood is completely mocks `CoreBluetooth` and doesn't touch the hardware at all. This is the default when running the SDK on the simulator.
+The central class of everything you need is the `GripManager`. You can access it using `GripManager.default`. You have to call `configure()` before anything else can be accessed. 
+
+The grip manager comes with different operations modes: The default one uses the system's bluetooth stack. Therefore it will only work on a physical device, Bluetooth on the iOS simulator is not supported. You can also run in `simulated` mode, to simulate any kind of situation to test your integration. Under the hood is completely mocks `CoreBluetooth` and doesn't touch the hardware at all. This is the default when running the SDK on the simulator.
 
 To use the normal mode, simply call `configure()`, otherwise pass the desired operation mode `GripManager.default.configure(with: .simulated)`.
 
-The Fjorden SDK offers two API versions:
-
-1. Closure callbacks
-2. Async/Await
-
-Xcode should be smart enough to pick the correct version of the API depending on the surrounding context.
-
-> Make sure to add a `NSBluetoothAlwaysUsageDescription` to your `Info.plist` file!, otherwise your app will crash the first time you are trying to connect to a new grip!
+The Fjorden SDK is based around async/await, but offers fallback using closures. Xcode should be smart enough to pick the correct version of the API depending on the surrounding context.
 
 ### Connection Flow
+
+> ‼️ Make sure to add a `NSBluetoothAlwaysUsageDescription` to your `Info.plist`, otherwise your app will crash the first time you are trying to connect to a new grip!
 
 #### Setting up a new grip
 
@@ -39,13 +36,19 @@ When selecting a grip, call `GripManager.default.connect(toGrip: selectedGrip)` 
 
 #### Restore Connection on App Launch
 
-Call `start()` on `GripManager` as soon as your app launches. By design, this method doesn't trigger anything that requires user input. If you have paired a grip before, it will try to connect it. If it isn't available, it will time out after 5.0 seconds. The timeout is configurable (`GripManager.default.timeoutThreshold`). If Bluetooth access isn't allowed, `unauthorized` will be returned.
+Call `GripManager.default.start()` as soon as your app launches. By design, this method doesn't trigger anything that requires user input, so it is always safe to call. If you have paired a grip before, it will try to connect it. If it isn't available, it will time out after 5.0 seconds.
+
+> You can change this timeout using a custom `GripManager.Configuration`, then pass it when setting up the grip manager `GripManager.default.configure(with: custom)`
+
+If Bluetooth access isn't allowed, `unauthorized` will be returned.
 
 #### Forget a configured grip
 
 In order to fully forget a paired grip, you have to call `GripManager.default.disconnectAndForgotBondedGrip()`. Afterwards, you **have** to direct users to Settings.app -> Bluetooth -> Fjorden Grip, let them tap the blue `i` button, and select “Forget this device”. Sadly, there is no programmatic way to achieve this.
 
 ## State
+
+The `GripManager` exposes a `state` property you can read at all times.
 
 ```swift
 public enum State: Equatable {
@@ -61,7 +64,7 @@ public enum State: Equatable {
 
 ### React to changes
 
-The `GripManager` exposes a `state` property you can read at all times. If you are interested being informed when the state changes, call `subscribeToStateChanges()`. See examples below.
+If you are interested being informed when the state changes, call `subscribeToStateChanges()`. See examples below.
 
 ```swift
 for await state in GripManager.default.subscribeToStateChanges() {
@@ -93,7 +96,8 @@ for await event in grip.subscribeToEvents() {
 or
 
 ```swift
-guard case .connected(let grip) = GripManager.default.state else {
+// `.connectedGrip` is a convenience property since writing case .connected(let grip) = GripManager.default.state can be awkward. It returns the grip is `.state` is connected, otherwise it return `nil`.
+guard let grip = GripManager.default.connectedGrip else {
    assertionFailure("Not connected to any grip")
    return
 }
@@ -105,10 +109,8 @@ grip.subscribeToEvents { [weak self] event in
 
 ### Firmware Upgrades
 
-TBD
+When first connecting to a grip, the SDK makes sure the grip has the min. required firmware. We don’t expect the communication interface between the SDK & the grip will change once we start shipping, but how knows :) In case the firmware is too old, the SDK will throw an error. If that happens, you should direct users to the Fjorden app to update the grip.
 
 ## macOS Simulator
 
-We added a little app you can run on your Mac (or second iOS device) that will act as a simulator for the Fjorden hardware. It will show up as `Fjorden Grip Simulator` first, but then will use the name of your device for the bond—this is sadly a limitation we can't work around at this point.
-
-Download the latest version here -> <URL_FOR_SIMULATOR>
+We added a little app you can run on your Mac (or second iOS device) that will act as a simulator for the Fjorden hardware. It will show up as `Fjorden Grip Simulator` first, but then will use the name of your device for the bond—this is sadly a limitation we can't work around at this point. Due to more limitation in `CoreBluetooth`, the simulator can only simulate grip events, not scenarios where the firmware needs upgrading. We will update this section with the download link once available.
