@@ -96,7 +96,9 @@ for await event in grip.subscribeToEvents() {
 or
 
 ```swift
-// `.connectedGrip` is a convenience property since writing case .connected(let grip) = GripManager.default.state can be awkward. It returns the grip is `.state` is connected, otherwise it return `nil`.
+// `.connectedGrip` is a convenience property since writing 
+// case .connected(let grip) = GripManager.default.state can be awkward. 
+// It returns the grip is `.state` is connected, otherwise it return `nil`.
 guard let grip = GripManager.default.connectedGrip else {
    assertionFailure("Not connected to any grip")
    return
