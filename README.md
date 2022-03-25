@@ -14,7 +14,7 @@
 
 The central class of everything you need is the `GripManager`. You can access it using `GripManager.default`. You have to call `configure()` before anything else can be accessed. 
 
-The grip manager comes with different operations modes: The default one uses the system's bluetooth stack. Therefore it will only work on a physical device, Bluetooth on the iOS simulator is not supported. You can also run in `simulated` mode, to simulate any kind of situation to test your integration. Under the hood is completely mocks `CoreBluetooth` and doesn't touch the hardware at all. This is the default when running the SDK on the simulator.
+The grip manager comes with different operations modes: The default one uses the system's bluetooth stack. Therefore it will only work on a physical device, Bluetooth on the iOS simulator is not supported. You can also run in `simulated` mode, to simulate any kind of situation to test your integration. Under the hood it completely mocks `CoreBluetooth` and doesn't touch the hardware at all. This is the default when running the SDK on the simulator.
 
 To use the normal mode, simply call `configure()`, otherwise pass the desired operation mode `GripManager.default.configure(with: .simulated)`.
 
@@ -59,6 +59,7 @@ public enum State: Equatable {
    case connecting(ConnectableGrip)
    case connected(ConnectedGrip)
    case unauthorized
+   case bluetoothUnavailable
 }
 ```
 
