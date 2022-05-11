@@ -81,7 +81,32 @@ GripManager.default.subscribeToStateChanges { [weak self] state in
 }
 ```
 
-## Handle Grip Events
+## Grip Events
+
+List of available events:
+
+```swift
+public enum GripEvent: CustomStringConvertible, CaseIterable {
+	case shutterButtonDown
+	case shutterButtonReleased
+	case shutterButtonHalfDown
+	case dialButtonCW
+	case dialButtonCCW
+	case dialButtonPress
+	case dialButtonLongPress
+	case fnButtonPress
+	case fnButtonLongPress
+	case zoomLeverHoldLeft
+	case zoomLeverHoldRight
+	case zoomLeverLeft
+	case zoomLeverRight
+	case zoomLeverNeutral
+}
+```
+
+### React to Events
+
+#### Async/Await
 
 ```swift
 guard case .connected(let grip) = GripManager.default.state else {
@@ -94,7 +119,7 @@ for await event in grip.subscribeToEvents() {
 }
 ```
 
-or
+#### Callback Closure
 
 ```swift
 // `.connectedGrip` is a convenience property since writing 
