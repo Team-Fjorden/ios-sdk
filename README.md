@@ -12,7 +12,7 @@
 
 ## Quick Start
 
-The central class of everything you need is the `GripManager`. You can access it using `GripManager.default`. You have to call `configure()` before anything else can be accessed. 
+The central class of everything you need is the `GripManager`. You can access it using `GripManager.default`. You have to call `configure()` before anything else can be accessed.
 
 The grip manager comes with different operations modes: The default one uses the system's bluetooth stack. Therefore it will only work on a physical device, Bluetooth on the iOS simulator is not supported. You can also run in `simulated` mode, to simulate any kind of situation to test your integration. Under the hood it completely mocks `CoreBluetooth` and doesn't touch the hardware at all. This is the default when running the SDK on the simulator.
 
@@ -28,15 +28,13 @@ The Fjorden SDK is based around async/await, but offers fallback using closures.
 
 To trigger the system alert to ask for Bluetooth permission, start the grip manager using `start(options: [.askForBluetoothPermission])`.
 
-Once the user has given permission, you can start scanning for available Fjorden grips using `GripManager.default.startScanningForFjordenGrips()`.
+Once the user has given permission, you can start scanning for available Fjorden grips using `GripManager.default.startScanningForFjordenGrips()`. If there is a grip (or multiple grips) around, the method will be called every time the signal strength of a discovered grip updates. The SDK handles deduplication, so you can always simply take the reported grip(s), no need to filter them yourself.
 
-We don't include any kind of UI in our SDK at this point, so it will be your job to present a list of found devices to the user.
-
-When selecting a grip, call `GripManager.default.connect(toGrip: selectedGrip)` passing the grip the user selected. This will trigger a system alert from iOS, asking to confirm pairing to the device. Once pairing is confirmed, the grip manager will check the device's firmware version to ensure it matches the minimum required version. See firmware upgrades for further details.
+**We don't include any kind of UI in our SDK**, so it will be your job to present a list of found devices to the user. When selecting a grip, call `GripManager.default.connect(toGrip: selectedGrip)` passing the grip the user selected. This will trigger a system alert from iOS, asking to confirm bonding to the device. Once pairing is confirmed, the grip is considered connected, and the `GripManager` transitions into the `.connected(ConnectedGrip)` state.
 
 #### Restore Connection on App Launch
 
-Call `GripManager.default.start()` as soon as your app launches. By design, this method doesn't trigger anything that requires user input, so it is always safe to call. If you have paired a grip before, it will try to connect it. If it isn't available, it will time out after 5.0 seconds.
+Call `GripManager.default.start()` as soon as your app launches. By design, this method doesn't trigger anything that requires user input, so it is always safe to call. If you have paired a grip before, it will try to connect it. If it isn't available, it will time out after 5.0 seconds. Usually the system re-connects to a grip as soon as you turn it on, even if your app with the Fjorden SDK is not running.
 
 > You can change this timeout using a custom `GripManager.Configuration`, then pass it when setting up the grip manager `GripManager.default.configure(with: custom)`
 
@@ -122,10 +120,7 @@ for await event in grip.subscribeToEvents() {
 #### Callback Closure
 
 ```swift
-// `.connectedGrip` is a convenience property since writing 
-// case .connected(let grip) = GripManager.default.state can be awkward. 
-// It returns the grip is `.state` is connected, otherwise it return `nil`.
-guard let grip = GripManager.default.connectedGrip else {
+guard case .connected(let grip) = GripManager.default.state else {
    assertionFailure("Not connected to any grip")
    return
 }
@@ -141,4 +136,4 @@ When first connecting to a grip, the SDK makes sure the grip has the min. requir
 
 ## macOS Simulator
 
-We added a little app you can run on your Mac (or second iOS device) that will act as a simulator for the Fjorden hardware. It will show up as `Fjorden Grip Simulator` first, but then will use the name of your device for the bond—this is sadly a limitation we can't work around at this point. Due to more limitation in `CoreBluetooth`, the simulator can only simulate grip events, not scenarios where the firmware needs upgrading. We will update this section with the download link once available.
+We will add a little app you can run on your Mac (or second iOS device) that will act as a simulator for the Fjorden hardware. It will show up as `Fjorden Grip Simulator` first, but then will use the name of your device for the bond—this is sadly a limitation we can't work around at this point. Due to more limitation in `CoreBluetooth`, the simulator can only simulate grip events, not scenarios where the firmware needs upgrading. We will update this section with the download link once available.
