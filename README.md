@@ -1,14 +1,18 @@
 # FjordenSDK
 
-> ⚠️ We are still actively working on the SDK, so the documentation is subject to change. We hope we can keep it as close to this as possible when we launch.
->
-> If you are interested in testing an early beta version, please let us know!
-
 ## Requirements & Installation
 
 - iOS 14
 - Xcode 13
 - Swift Package Manager or manual integration
+
+### SPM
+
+Add `https://github.com/Team-Fjorden/ios-sdk` to your `Package.swift` file or via Xcode → Add Packages… & paste the URL into the search field.
+
+### Manual
+
+Download the [latest files](https://github.com/Team-Fjorden/ios-sdk/releases/download/1.0.0/FjordenSDK.xcframework.zip) from the Release tab. Unzip, and drag the `xcframework` files into the `Frameworks, Libraries, and Embedded Content` section of your target.
 
 ## Quick Start
 
