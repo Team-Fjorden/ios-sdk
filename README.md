@@ -1,10 +1,16 @@
 # FjordenSDK
 
-## Requirements & Installation
+## Documentation
+
+[Full documentation ↗](https://sdk.fjorden.co/)
+
+## Requirements
 
 - iOS 14
 - Xcode 13
 - Swift Package Manager or manual integration
+
+## Quick start
 
 ### SPM
 
@@ -12,7 +18,7 @@ Add `https://github.com/Team-Fjorden/ios-sdk` to your `Package.swift` file or vi
 
 ### Manual
 
-Download the [latest files](https://github.com/Team-Fjorden/ios-sdk/releases/download/1.0.0/FjordenSDK.xcframework.zip) from the Release tab. Unzip, and drag the `xcframework` files into the `Frameworks, Libraries, and Embedded Content` section of your target.
+Download the [latest release](https://github.com/Team-Fjorden/ios-sdk/releases/download/1.0.0/FjordenSDK.xcframework.zip) from the Release tab. Unzip, and drag the `xcframework` files into the `Frameworks, Libraries, and Embedded Content` section of your target.
 
 ## Quick Start
 
@@ -50,24 +56,11 @@ In order to fully forget a paired grip, you have to call `GripManager.default.di
 
 ## State
 
-The `GripManager` exposes a `state` property you can read at all times.
-
-```swift
-public enum State: Equatable {
-   case uninitialized
-   case ready
-   case scanningForGrips
-   case scanningForBondedGrip
-   case connecting(ConnectableGrip)
-   case connected(ConnectedGrip)
-   case unauthorized
-   case bluetoothUnavailable
-}
-```
+The [`GripManager`](https://sdk.fjorden.co/documentation/fjordensdk/gripmanager) exposes a [`state`](https://sdk.fjorden.co/documentation/fjordensdk/gripmanager/state-swift.property) property you can read at all times.
 
 ### React to changes
 
-If you are interested being informed when the state changes, call `subscribeToStateChanges()`. See examples below.
+If you are interested being informed when the state changes, call [`subscribeToStateChanges()`](https://sdk.fjorden.co/documentation/fjordensdk/gripmanager/subscribetostatechanges()). See examples below.
 
 ```swift
 for await state in GripManager.default.subscribeToStateChanges() {
@@ -85,26 +78,7 @@ GripManager.default.subscribeToStateChanges { [weak self] state in
 
 ## Grip Events
 
-List of available events:
-
-```swift
-public enum GripEvent: CustomStringConvertible, CaseIterable {
-	case shutterButtonDown
-	case shutterButtonReleased
-	case shutterButtonHalfDown
-	case dialButtonCW
-	case dialButtonCCW
-	case dialButtonPress
-	case dialButtonLongPress
-	case fnButtonPress
-	case fnButtonLongPress
-	case zoomLeverHoldLeft
-	case zoomLeverHoldRight
-	case zoomLeverLeft
-	case zoomLeverRight
-	case zoomLeverNeutral
-}
-```
+[List of available events ↗](https://sdk.fjorden.co/documentation/fjordensdk/gripevent)
 
 ### React to Events
 
@@ -138,63 +112,6 @@ grip.subscribeToEvents { [weak self] event in
 
 When first connecting to a grip, the SDK makes sure the grip has the min. required firmware. We don’t expect the communication interface between the SDK & the grip will change once we start shipping, but how knows :) In case the firmware is too old, the SDK will throw an error. If that happens, you should direct users to the Fjorden app to update the grip.
 
-## Errors
-
-```swift
-/// This is a collection of errors that can be thrown when using the Fjorden SDK.
-public enum Errors {
-
-    /// Catch all for unknown errors.
-    case unknown
-
-    /// When attempting to connect to a previously bonded grip but there is no bonding information available this error will be thrown.
-    case bondDoesNotExists
-
-    /// The `GripManager` instance somehow found itself in an invalid/unexpected state. Behavior is undefined after this error is thrown.
-    case invalidManagerState
-
-    /// Before interacting with the default instance of the `GripManager` it is required to configure it by calling the the `configure` function.
-    case managerNotConfigured
-
-    /// The default instance of the `GripManager` can only be configured once.
-    case managerAlreadyConfigured
-
-    /// When connecting to a grip a timer will make sure the process does not run indefinite. If the timer fires this error will be thrown.
-    case connectionTimeout
-
-    /// When trying to find the bonded grip, but the `GripManager` is already scanning for it
-    case alreadyScanningForBondedGrip
-
-    /// An error occurred whilst trying to discover one or multiple services of a device.
-    case gripUnableToDiscoverService
-
-    /// An error occurred whilst trying to discover one or multiple service characteristics of a device.
-    case gripUnableToDiscoverCharacteristics
-
-    /// This error is thrown when the firmware cannot be read from a grip.
-    case gripUnableToReadFirmwareVersion
-
-    /// Occurs when subscribing to grip event notifications on the underlying CBPeripheral fails
-    case gripUnableToEnableNotify
-
-    /// This error is thrown when the `GripInfo` cannot be read from the connected grip.
-    case gripUnableToReadGripInfo
-
-    /// This error is thrown when the `BatteryInfo` cannot be read from the connected grip.
-    case gripUnableToReadBatteryInfo
-
-    /// The discovered grip has an unsupported firmware version. The user will need to upload the latest firmware by using the Fjorden app.
-    case gripUnsupportedFirmwareVersion
-
-    /// On initial setup, the system presents a pairing request alert. If the user declines this request, the grip can't connect.
-    case gripPairingRequestDeclined
-
-    /// When the grip disconnects while it is discovering services and/or characteristics, all outstanding discovery requests will be cancelled.
-    case gripDiscoveryCancelled
-}
-```
-
 ## macOS Simulator
 
 We will add a little app you can run on your Mac (or second iOS device) that will act as a simulator for the Fjorden hardware. It will show up as `Fjorden Grip Simulator` first, but then will use the name of your device for the bond—this is sadly a limitation we can't work around at this point. Due to more limitation in `CoreBluetooth`, the simulator can only simulate grip events, not scenarios where the firmware needs upgrading. We will update this section with the download link once available.
-
