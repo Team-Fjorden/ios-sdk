@@ -138,6 +138,63 @@ grip.subscribeToEvents { [weak self] event in
 
 When first connecting to a grip, the SDK makes sure the grip has the min. required firmware. We don’t expect the communication interface between the SDK & the grip will change once we start shipping, but how knows :) In case the firmware is too old, the SDK will throw an error. If that happens, you should direct users to the Fjorden app to update the grip.
 
+## Errors
+
+```swift
+/// This is a collection of errors that can be thrown when using the Fjorden SDK.
+public enum Errors {
+
+    /// Catch all for unknown errors.
+    case unknown
+
+    /// When attempting to connect to a previously bonded grip but there is no bonding information available this error will be thrown.
+    case bondDoesNotExists
+
+    /// The `GripManager` instance somehow found itself in an invalid/unexpected state. Behavior is undefined after this error is thrown.
+    case invalidManagerState
+
+    /// Before interacting with the default instance of the `GripManager` it is required to configure it by calling the the `configure` function.
+    case managerNotConfigured
+
+    /// The default instance of the `GripManager` can only be configured once.
+    case managerAlreadyConfigured
+
+    /// When connecting to a grip a timer will make sure the process does not run indefinite. If the timer fires this error will be thrown.
+    case connectionTimeout
+
+    /// When trying to find the bonded grip, but the `GripManager` is already scanning for it
+    case alreadyScanningForBondedGrip
+
+    /// An error occurred whilst trying to discover one or multiple services of a device.
+    case gripUnableToDiscoverService
+
+    /// An error occurred whilst trying to discover one or multiple service characteristics of a device.
+    case gripUnableToDiscoverCharacteristics
+
+    /// This error is thrown when the firmware cannot be read from a grip.
+    case gripUnableToReadFirmwareVersion
+
+    /// Occurs when subscribing to grip event notifications on the underlying CBPeripheral fails
+    case gripUnableToEnableNotify
+
+    /// This error is thrown when the `GripInfo` cannot be read from the connected grip.
+    case gripUnableToReadGripInfo
+
+    /// This error is thrown when the `BatteryInfo` cannot be read from the connected grip.
+    case gripUnableToReadBatteryInfo
+
+    /// The discovered grip has an unsupported firmware version. The user will need to upload the latest firmware by using the Fjorden app.
+    case gripUnsupportedFirmwareVersion
+
+    /// On initial setup, the system presents a pairing request alert. If the user declines this request, the grip can't connect.
+    case gripPairingRequestDeclined
+
+    /// When the grip disconnects while it is discovering services and/or characteristics, all outstanding discovery requests will be cancelled.
+    case gripDiscoveryCancelled
+}
+```
+
 ## macOS Simulator
 
 We will add a little app you can run on your Mac (or second iOS device) that will act as a simulator for the Fjorden hardware. It will show up as `Fjorden Grip Simulator` first, but then will use the name of your device for the bond—this is sadly a limitation we can't work around at this point. Due to more limitation in `CoreBluetooth`, the simulator can only simulate grip events, not scenarios where the firmware needs upgrading. We will update this section with the download link once available.
+
