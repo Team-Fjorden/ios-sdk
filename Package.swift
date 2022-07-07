@@ -16,8 +16,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "FjordenSDK",
-            url: "https://github.com/Team-Fjorden/ios-sdk/releases/download/v1.0.0/FjordenSDK.xcframework.zip",
-            checksum: "50aa6c8b47711dd47d4b7441e2ea9c5744a663c6527cd4678e9e4e8c3e3b20f8"
+            url: "https://sdk.fjorden.co/releases/1.0.1/FjordenSDK.xcframework.zip",
+            checksum: "67b9f3906e0a83021d4c31c5666bc8b773147a333bde15c2a8d0d1d2788ade45"
         )
     ]
 )
