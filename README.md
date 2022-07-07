@@ -18,7 +18,7 @@ Add `https://github.com/Team-Fjorden/ios-sdk` to your `Package.swift` file or vi
 
 ### Manual
 
-Download the [latest release](https://github.com/Team-Fjorden/ios-sdk/releases/download/1.0.0/FjordenSDK.xcframework.zip) from the Release tab. Unzip, and drag the `xcframework` files into the `Frameworks, Libraries, and Embedded Content` section of your target.
+Download the [latest release](https://sdk.fjorden.co/releases/1.0.1/FjordenSDK.xcframework.zip) from the Release tab. Unzip, and drag the `xcframework` files into the `Frameworks, Libraries, and Embedded Content` section of your target.
 
 ## Quick Start
 
