@@ -12,13 +12,15 @@
 
 ## Quick start
 
+⚠️ There are a couple of bugs in SPM and/or Xcode that might break Xcode Cloud and/or SwiftUI preview. Packages that define a dynamic framework seem to break Xcode Cloud, e.g. https://github.com/DataDog/dd-sdk-ios/issues/624#issuecomment-965240757, https://developer.apple.com/forums/thread/689907, https://github.com/simibac/ConfettiSwiftUI/issues/8. We can't change our SDK to be a static library, because we rely on other frameworks as well. Static libraries via SPM also seem to break SwiftUI previews (https://github.com/DataDog/dd-sdk-ios/pull/949, https://developer.apple.com/forums/thread/707569). The most reliable way to integrate the FjordenSDK at the moment is to manually add the latest `.xcframework` file to your workspace & include it in your repository.
+
 ### SPM
 
 Add `https://github.com/Team-Fjorden/ios-sdk` to your `Package.swift` file or via Xcode → Add Packages… & paste the URL into the search field.
 
 ### Manual
 
-Download the [latest release](https://sdk.fjorden.co/releases/1.0.1/FjordenSDK.xcframework.zip) from the Release tab. Unzip, and drag the `xcframework` files into the `Frameworks, Libraries, and Embedded Content` section of your target.
+Download the [latest release](https://sdk.fjorden.co/releases/1.1.3/FjordenSDK.xcframework.zip) from the Release tab. Unzip, and drag the `xcframework` files into the `Frameworks, Libraries, and Embedded Content` section of your target.
 
 ## Quick Start
 

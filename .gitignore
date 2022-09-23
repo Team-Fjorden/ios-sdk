@@ -1,2 +1,3 @@
 .build
 .vscode
+/.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
