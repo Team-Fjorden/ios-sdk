@@ -1,8 +1,8 @@
 // swift-tools-version:5.6
 import PackageDescription
 
-let version = "1.1.4"
-let checksum = "d089835657ca3ba0a1ddd1f4c01717a95a87f2c50cdeb3bd71fcf865741af6f3"
+let version = "1.2.0"
+let checksum = "b3b7556c1b38484a2dca8a78691ca1b98d00b4990f0d234852efc4ae559c02eb"
 
 let package = Package(
     name: "FjordenSDK",
